@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="MedFuncta: Modality Agnostic Representations Based on Efficient Neural Fields">
-  <meta name="keywords" content="Neural Fields, Modality Agnostic, Representation Learning, Meta-Learning, Implicit Neural Representations">
+  <meta name="description" content="MedFuncta: Modality-Agnostic Representations Based on Efficient Neural Fields">
+  <meta name="keywords" content="Neural Fields, Modality-Agnostic, Representation Learning, Meta-Learning, Implicit Neural Representations">
   <meta name="viewport" content="width=device-width, initial-scale=1">
     
   <title>MedFuncta: Modality-Agnostic Representation Based on Efficient Neural Representations</title>
@@ -30,11 +30,9 @@
     MathJax.Hub.Config({ extensions: ["tex2jax.js"], jax: ["input/TeX", "output/HTML-CSS"], tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ], displayMath: [ ['$$','$$'], ["\\[","\\]"] ], processEscapes: true }, "HTML-CSS": { fonts: ["TeX"] } });
   </script>
   
-  <!-- Load plotly.js into the DOM for the clickable events -->
 	<script src='https://cdn.plot.ly/plotly-2.14.0.min.js'></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     
-  <!-- <script src="./static/js/clickable.js"></script> -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   
@@ -142,6 +140,7 @@
     </div>
   </section>
 
+  <!-- Eyecatcher. -->
   <section class="eyecatcher">
     <div class="container is-max-desktop">
       <div class="hero-body">
@@ -154,9 +153,9 @@
     </div>
   </section>
 
+  <!-- Abstract. -->
   <section class="section" style="background-color:#f5f5f5">
     <div class="container is-max-desktop">
-      <!-- Abstract. -->
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
           <h2 class="title is-3">Abstract</h2>
@@ -171,8 +170,10 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <!-- General Idea. -->
   <section class="section ">
     <div class="container is-max-desktop ">
       <div class="columns is-centered has-text-centered ">
@@ -188,8 +189,10 @@
           <h2 class="subtitle has-text-centered">Difference between explicitly defined discrete representations on the left and continuous Neural Fields that define a signal (e.g., an image) as a neural function \(f_\theta\) on the right.</h2>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <!-- Data as Functions. -->
   <section class="section ">
     <div class="container is-max-desktop ">
       <div class="columns is-centered has-text-centered ">
@@ -205,60 +208,66 @@
           <h2 class="subtitle has-text-centered">Proposed framework with shared model parameters \(\theta\) that parameterize a shared network, and signal-specific parameter \(\phi^{(i)}\) that condition this network to represent a single signal.</h2>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section ">
-        <div class="container is-max-desktop ">
-            <div class="columns is-centered has-text-centered ">
-                <div class="column ">
-                    <h3 class="title is-5 ">Meta-Learning Shared Model Parameters (with Context Reduction)</h3>
-                    <div class="has-text-justified">
-                        To efficiently create a set of NFs, we aim to meta-learn the shared parameters \(\theta\) so that we can fit a signal \(s_i\) by only optimizing \(\phi^{(i)}\) for very few update steps. We follow a <a href="https://arxiv.org/abs/1810.03642">CAVIA</a> meta-learning approach. Before we take a single meta-update step with respect to the shared parameters \(\theta\), we update \(\phi\) for \(G\) inner-loop update steps.
-                        Since performing a single meta-update step requires backpropagating through the entire inner-loop optimization, the computational graph must be retained in GPU memory to compute the required second-order gradients. This is a resource-intensive task that does not scale well to high-dimensional signals. While first-order approximations or auto-decoder training approaches that do not rely on second-order optimization exist, recent research has shown that this results in severe performance drops or unstable training. 
-                    </div>
-                    <img src="images/Learning.png" style="width:100%">
-                    <h2 class="subtitle has-text-centered"> <i>(Left)</i> The proposed meta-learning framework with context reduction.
-                                                            <i>(Right)</i> The test-time optimization process after meta-learning.
-                    </h2>
-                    <div class="has-text-justified">
-                      To circumvent this issue, we present a context-reduction approach that reduces the amount of pixel-value pairs used to optimize \(\phi\) in the inner-loop. We randomly sample \(\gamma|\mathcal{C}|\) coordinate-value pairs from the full context set \(\mathcal{C}\). This significantly reduces the computational burden, while resulting in marginal perfromance drops.
-                    </div><br> <br> 
-
-                    <h2 class="title is-5 ">Test-Time Adaptation</h2>
-                    <div class="has-text-justified">
-                      Given the meta-learned model parameters \(\theta^{*}\), we fit a Neural Field to each signal \(s_1, ..., s_N\). 
-                      We start with initializing the signal-specific parameters \(\phi^{(i)}:=\mathbf{0}\) and optimize \(\phi^{(i)}\) for \(H\) steps. As no second-order optimization is required at test-time, we can make use of the full context set.
-                      A set of NFs representing the signals \(s_1, ..., s_N\) is therefore defined by the network architecture, the shared model parameters \(\theta^{*}\), and the signal-specific parameters \(\phi^{(1)}, ..., \phi^{(N)}\).
-                    </div><br>   
-                </div>
-            </div>
-    </section>
-    
-    <section class="section ">
-      <div class="container is-max-desktop ">
-          <div class="columns is-centered has-text-centered ">
-              <div class="column ">
-                  <h2 class="title is-3 ">Learning on this Representation</h2>
-                  <div class="has-text-justified">
-                  To demonstarte that our obtained representation is meaningful, we perform classifcation expereimnts on our MedFuncta representation and compare it to commonly used classifiers on the original data.
-                  We apply a very simple MLP classifier with ReLU and dropout to our representation and find that this simple classifier generally perfroms well, indicating that the representation contains meaningful information about the underlying data.
-                  </div>
-                  <br>
-                  <img src="images/ClassificationExp.png" style="width:70%">
-              </div>
+  <!-- Meta-learning. -->
+  <section class="section ">
+    <div class="container is-max-desktop ">
+      <div class="columns is-centered has-text-centered ">
+        <div class="column ">
+        <h3 class="title is-5 ">Meta-Learning Shared Model Parameters (with Context Reduction)</h3>
+          <div class="has-text-justified">
+            To efficiently create a set of NFs, we aim to meta-learn the shared parameters \(\theta\) so that we can fit a signal \(s_i\) by only optimizing \(\phi^{(i)}\) for very few update steps. We follow a <a href="https://arxiv.org/abs/1810.03642">CAVIA</a> meta-learning approach. Before we take a single meta-update step with respect to the shared parameters \(\theta\), we update \(\phi\) for \(G\) inner-loop update steps.
+            Since performing a single meta-update step requires backpropagating through the entire inner-loop optimization, the computational graph must be retained in GPU memory to compute the required second-order gradients. This is a resource-intensive task that does not scale well to high-dimensional signals. While first-order approximations or auto-decoder training approaches that do not rely on second-order optimization exist, recent research has shown that this results in severe performance drops or unstable training. 
           </div>
+          <img src="images/Learning.png" style="width:100%">
+          <h2 class="subtitle has-text-centered"> <i>(Left)</i> The proposed meta-learning framework with context reduction.
+                                                  <i>(Right)</i> The test-time optimization process after meta-learning.
+          </h2>
+          <div class="has-text-justified">
+            To circumvent this issue, we present a context-reduction approach that reduces the amount of pixel-value pairs used to optimize \(\phi\) in the inner-loop. We randomly sample \(\gamma|\mathcal{C}|\) coordinate-value pairs from the full context set \(\mathcal{C}\). This significantly reduces the computational burden, while resulting in marginal perfromance drops.
+          </div>
+          <br>
+          <br> 
+          <h2 class="title is-5 ">Test-Time Adaptation</h2>
+          <div class="has-text-justified">
+            Given the meta-learned model parameters \(\theta^{*}\), we fit a Neural Field to each signal \(s_1, ..., s_N\). 
+            We start with initializing the signal-specific parameters \(\phi^{(i)}:=\mathbf{0}\) and optimize \(\phi^{(i)}\) for \(H\) steps. As no second-order optimization is required at test-time, we can make use of the full context set.
+            A set of NFs representing the signals \(s_1, ..., s_N\) is therefore defined by the network architecture, the shared model parameters \(\theta^{*}\), and the signal-specific parameters \(\phi^{(1)}, ..., \phi^{(N)}\).
+          </div>
+          <br>   
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
+  
+  <!-- Learning on Representation. -->
+  <section class="section ">
+    <div class="container is-max-desktop ">
+      <div class="columns is-centered has-text-centered ">
+        <div class="column ">
+          <h2 class="title is-3 ">Learning on this Representation</h2>
+          <div class="has-text-justified">
+            To demonstarte that our obtained representation is meaningful, we perform classifcation expereimnts on our MedFuncta representation and compare it to commonly used classifiers on the original data.
+            We apply a very simple MLP classifier with ReLU and dropout to our representation and find that this simple classifier generally perfroms well, indicating that the representation contains meaningful information about the underlying data.
+          </div>
+          <br>
+          <img src="images/ClassificationExp.png" style="width:70%">
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="section ">
-        <div class="container is-max-desktop ">
-            <div class="columns is-centered has-text-centered ">
-                <div class="column ">
-                    <h2 class="title is-3 ">Reconstruction Results</h2>
+  <!-- Reconstruction Results. -->
+  <section class="section ">
+    <div class="container is-max-desktop ">
+      <div class="columns is-centered has-text-centered ">
+        <div class="column ">
+          <h2 class="title is-3 ">Reconstruction Results</h2>
 
-        <!-- row 1 -->
-        <div class="columns is-centered">
-           
+          <!-- row 1 -->
+          <div class="columns is-centered">
             <!-- col 1 -->
             <div class="column">
               <div class="content">
@@ -287,65 +296,9 @@
 
             <!-- col 2 -->
             <div class="column">
-                <div class="content">
-                  <div class="tab_container">
-                    <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
-                      <div class="jx-slider">
-                        <div class="jx-handle " style="left: 54.53%;">
-                          <div class="jx-arrow jx-left"></div>
-                          <div class="jx-control">
-                            <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                              aria-valuemax="100"></div>
-                          </div>
-                          <div class="jx-arrow jx-right"></div>
-                        </div>
-                        <div class="jx-image jx-left " style="width: 54.53%;">
-                          <img src="./images/recon/pneum/input.png" alt="" data-label="Input">
-                        </div>
-                        <div class="jx-image jx-right " style="width: 45.47%;">
-                          <img src="./images/recon/pneum/recon.png" alt="" data-label="Recon.">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            
-            <!-- col 3 -->
-            <div class="column">
-                <div class="content">
-                  <div class="tab_container">
-                    <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
-                      <div class="jx-slider">
-                        <div class="jx-handle " style="left: 54.53%;">
-                          <div class="jx-arrow jx-left"></div>
-                          <div class="jx-control">
-                            <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                              aria-valuemax="100"></div>
-                          </div>
-                          <div class="jx-arrow jx-right"></div>
-                        </div>
-                        <div class="jx-image jx-left " style="width: 54.53%;">
-                          <img src="./images/recon/oct/input.png" alt="" data-label="Input">
-                        </div>
-                        <div class="jx-image jx-right " style="width: 45.47%;">
-                          <img src="./images/recon/oct/recon.png" alt="" data-label="Recon.">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-                </div>
-
-        <!-- row 2 -->
-        <div class="columns is-centered">
-           
-            <!-- col 1 -->
-            <div class="column">
               <div class="content">
                 <div class="tab_container">
-                  <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true" class="juxtapose">
+                  <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
                     <div class="jx-slider">
                       <div class="jx-handle " style="left: 54.53%;">
                         <div class="jx-arrow jx-left"></div>
@@ -356,115 +309,194 @@
                         <div class="jx-arrow jx-right"></div>
                       </div>
                       <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/fundus/input.png" alt="" data-label="Input" >
+                        <img src="./images/recon/pneum/input.png" alt="" data-label="Input">
                       </div>
                       <div class="jx-image jx-right " style="width: 45.47%;">
-                        <img src="./images/recon/fundus/recon.png" alt="" data-label="Recon.">
+                        <img src="./images/recon/pneum/recon.png" alt="" data-label="Recon.">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- col 2 -->
-            <div class="column">
-                <div class="content">
-                  <div class="tab_container">
-                    <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
-                      <div class="jx-slider">
-                        <div class="jx-handle " style="left: 54.53%;">
-                          <div class="jx-arrow jx-left"></div>
-                          <div class="jx-control">
-                            <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                              aria-valuemax="100"></div>
-                          </div>
-                          <div class="jx-arrow jx-right"></div>
-                        </div>
-                        <div class="jx-image jx-left " style="width: 54.53%;">
-                          <img src="./images/recon/derma/input.png" alt="" data-label="Input">
-                        </div>
-                        <div class="jx-image jx-right " style="width: 45.47%;">
-                          <img src="./images/recon/derma/recon.png" alt="" data-label="Recon.">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             
             <!-- col 3 -->
             <div class="column">
-                <div class="content">
-                  <div class="tab_container">
-                    <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
-                      <div class="jx-slider">
-                        <div class="jx-handle " style="left: 54.53%;">
-                          <div class="jx-arrow jx-left"></div>
-                          <div class="jx-control">
-                            <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                              aria-valuemax="100"></div>
-                          </div>
-                          <div class="jx-arrow jx-right"></div>
-                        </div>
-                        <div class="jx-image jx-left " style="width: 54.53%;">
-                          <img src="./images/recon/histo/input.png" alt="" data-label="Input">
-                        </div>
-                        <div class="jx-image jx-right " style="width: 45.47%;">
-                          <img src="./images/recon/histo/recon.png" alt="" data-label="Recon.">
-                        </div>
+              <div class="content">
+                <div class="tab_container">
+                  <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
+                    <div class="jx-slider">
+                      <div class="jx-handle " style="left: 54.53%;">
+                        <div class="jx-arrow jx-left"></div>
+                        <div class="jx-control">
+                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                         </div>
+                        <div class="jx-arrow jx-right"></div>
+                      </div>
+                      <div class="jx-image jx-left " style="width: 54.53%;">
+                        <img src="./images/recon/oct/input.png" alt="" data-label="Input">
+                      </div>
+                       <div class="jx-image jx-right " style="width: 45.47%;">
+                        <img src="./images/recon/oct/recon.png" alt="" data-label="Recon.">
                       </div>
                     </div>
                   </div>
                 </div>
-            </div>
-            </div>
-    </section>
+              </div>
+            </div>           
+          </div>
 
-    <section class="section " id="BibTeX ">
-        <div class="container is-max-desktop content ">
-            <h2 class="title ">BibTeX</h2>
-            <pre><code>@article{friedrich2025medfuncta,
+        <!-- row 2 -->
+        <div class="columns is-centered">
+          <!-- col 1 -->
+          <div class="column">
+            <div class="content">
+              <div class="tab_container">
+                <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true" class="juxtapose">
+                  <div class="jx-slider">
+                    <div class="jx-handle " style="left: 54.53%;">
+                      <div class="jx-arrow jx-left"></div>
+                      <div class="jx-control">
+                        <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
+                          aria-valuemax="100"></div>
+                      </div>
+                      <div class="jx-arrow jx-right"></div>
+                    </div>
+                    <div class="jx-image jx-left " style="width: 54.53%;">
+                      <img src="./images/recon/fundus/input.png" alt="" data-label="Input" >
+                    </div>
+                    <div class="jx-image jx-right " style="width: 45.47%;">
+                      <img src="./images/recon/fundus/recon.png" alt="" data-label="Recon.">
+                    </div>
+                  </div>
+                </div>
+               </div>
+            </div>
+          </div>
+
+          <!-- col 2 -->
+          <div class="column">
+              <div class="content">
+                <div class="tab_container">
+                  <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
+                    <div class="jx-slider">
+                      <div class="jx-handle " style="left: 54.53%;">
+                        <div class="jx-arrow jx-left"></div>
+                        <div class="jx-control">
+                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                        </div>
+                        <div class="jx-arrow jx-right"></div>
+                      </div>
+                      <div class="jx-image jx-left " style="width: 54.53%;">
+                        <img src="./images/recon/derma/input.png" alt="" data-label="Input">
+                      </div>
+                      <div class="jx-image jx-right " style="width: 45.47%;">
+                         <img src="./images/recon/derma/recon.png" alt="" data-label="Recon.">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- col 3 -->
+            <div class="column">
+              <div class="content">
+                <div class="tab_container">
+                  <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
+                    <div class="jx-slider">
+                      <div class="jx-handle " style="left: 54.53%;">
+                        <div class="jx-arrow jx-left"></div>
+                        <div class="jx-control">
+                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                        </div>
+                        <div class="jx-arrow jx-right"></div>
+                      </div>
+                      <div class="jx-image jx-left " style="width: 54.53%;">
+                        <img src="./images/recon/histo/input.png" alt="" data-label="Input">
+                      </div>
+                      <div class="jx-image jx-right " style="width: 45.47%;">
+                        <img src="./images/recon/histo/recon.png" alt="" data-label="Recon.">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content" style="position: relative;">
+      <h2 class="title">BibTeX</h2>
+    
+      <div style="position: relative; display: inline-block; width: 100%;">
+      <button onclick="copyBibTeX()" class="button is-small is-primary" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+        Copy
+      </button>
+      <pre style="position: relative; padding-right: 5px;">
+      <code id="bibtex">
+@article{friedrich2025medfuncta,
          title={MedFuncta: Modality-Agnostic Representations Based on Efficient Neural Fields},
          author={Friedrich, Paul and Bieder, Florentin and Cattin, Phlippe C},
          journal={arXiv preprint arXiv:2502.14401},
          year={2025}
-         }</code></pre>
-        </div>
-    </section>
+        }</code>
+      </pre>
+      </div>
+    </div>
+  </section>
 
-    <section class="section " id="Acknowledgements ">
-        <div class="container is-max-desktop content ">
-            <h2 class="title ">Acknowledgements</h2>
-            <p>This work was financially supported by the <a href="https://www.wernersiemens-stiftung.ch/en/ ">Werner Siemens Foundation</a> through the <a href="https://www.wernersiemens-stiftung.ch/en/projects/miracle-ii ">MIRACLE II</a> project.</p>
-        </div>
-    </section>
+<script>
+function copyBibTeX() {
+  var bibtex = document.getElementById("bibtex").innerText;
+  navigator.clipboard.writeText(bibtex).catch(err => {
+    console.error("Failed to copy: ", err);
+  });
+}
+</script>
 
-    <footer class="footer ">
-        <div class="container ">
-            <div class="content has-text-centered ">
-                <a class="icon-link " href="https://arxiv.org/abs/2502.14401">
-                    <i class="fas fa-file-pdf "></i>
-                </a>
-                <a class="icon-link " href="https://github.com/pfriedri/medfuncta" class="external-link " disabled>
-                    <i class="fab fa-github "></i>
-                </a>
-            </div>
-            <div class="columns is-centered ">
-                <div class="column is-8 ">
-                    <div class="content ">
-                        <p>
-                            This website is licensed under a <a rel="license " href="http://creativecommons.org/licenses/by-sa/4.0/ ">Creative
+
+  <section class="section " id="Acknowledgements ">
+    <div class="container is-max-desktop content ">
+      <h2 class="title ">Acknowledgements</h2>
+      <p>This work was financially supported by the <a href="https://www.wernersiemens-stiftung.ch/en/ ">Werner Siemens Foundation</a> through the <a href="https://www.wernersiemens-stiftung.ch/en/projects/miracle-ii ">MIRACLE II</a> project.</p>
+    </div>
+  </section>
+
+  <footer class="footer ">
+    <div class="container ">
+      <div class="content has-text-centered ">
+        <a class="icon-link " href="https://arxiv.org/abs/2502.14401">
+          <i class="fas fa-file-pdf "></i>
+        </a>
+        <a class="icon-link " href="https://github.com/pfriedri/medfuncta" class="external-link " disabled>
+          <i class="fab fa-github "></i>
+        </a>
+      </div>
+      
+      <div class="columns is-centered ">
+        <div class="column is-8 ">
+          <div class="content ">
+          <p>
+            This website is licensed under a <a rel="license " href="http://creativecommons.org/licenses/by-sa/4.0/ ">Creative
             Commons Attribution-ShareAlike 4.0 International License</a>.
-                        </p>
-                        <p>
-                            This webpage is adepted from the <a href="https://github.com/nerfies/nerfies.github.io ">Nerfies</a> template.
-                        </p>
-                    </div>
-                </div>
-            </div>
+          </p>
+          <p>
+            This webpage is adepted from the <a href="https://github.com/nerfies/nerfies.github.io ">Nerfies</a> template.
+          </p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </footer>
 
 </body>
 
