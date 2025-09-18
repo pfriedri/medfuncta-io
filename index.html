@@ -2,501 +2,592 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="MedFuncta: Modality-Agnostic Representations Based on Efficient Neural Fields">
-  <meta name="keywords" content="Neural Fields, Modality-Agnostic, Representation Learning, Meta-Learning, Implicit Neural Representations">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-  <title>MedFuncta: Modality-Agnostic Representation Based on Efficient Neural Representations</title>
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="description" content="MedFuncta: A Unified Framework for Learning Efficient Medical Neural Fields">
+    <meta name="keywords"
+          content="Neural Fields, Modality-Agnostic, Representation Learning, Meta-Learning, Implicit Neural Representations, Medical Imaging">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="./static/css/juxtapose.css">
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/mousehover.css">
-  <link rel="icon" href="./static/images/favicon.svg">
-    
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-  <script src="./static/js/juxtapose.js"></script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({ extensions: ["tex2jax.js"], jax: ["input/TeX", "output/HTML-CSS"], tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ], displayMath: [ ['$$','$$'], ["\\[","\\]"] ], processEscapes: true }, "HTML-CSS": { fonts: ["TeX"] } });
-  </script>
-  
-	<script src='https://cdn.plot.ly/plotly-2.14.0.min.js'></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  
+    <title>MedFuncta: A Unified Framework for Learning Efficient Medical Neural Fields</title>
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/juxtapose.css">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="stylesheet" href="./static/css/mousehover.css">
+    <link rel="icon" href="./static/images/favicon.svg">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+    <script src="./static/js/juxtapose.js"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ extensions: ["tex2jax.js"], jax: ["input/TeX", "output/HTML-CSS"], tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ], displayMath: [ ['$$','$$'], ["\\[","\\]"] ], processEscapes: true }, "HTML-CSS": { fonts: ["TeX"] } });
+    </script>
+
+    <script src='https://cdn.plot.ly/plotly-2.14.0.min.js'></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 
 <body>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
     </div>
     <div class="navbar-menu">
-      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-        <a class="navbar-item" href="https://pfriedri.github.io">
+        <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+            <a class="navbar-item" href="https://pfriedri.github.io">
           <span class="icon">
             <i class="fas fa-home"></i>
           </span>
-        </a>
-
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            More Research
-          </a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://pfriedri.github.io/wdm-3d-io/">
-              WDM: 3D Wavelet Diffusion Models for High-Resolution Medical Image Synthesis
             </a>
-            <a class="navbar-item" href="https://pfriedri.github.io/pcdiff-implant-io/">
-              Point Cloud Diffuison Models for Automatic Implant Generation
-            </a>
-          </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    More Research
+                </a>
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="https://pfriedri.github.io/wdm-3d-io/">
+                        WDM: 3D Wavelet Diffusion Models for High-Resolution Medical Image Synthesis
+                    </a>
+                    <a class="navbar-item" href="https://pfriedri.github.io/pcdiff-implant-io/">
+                        Point Cloud Diffusion Models for Automatic Implant Generation
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </nav>
+</nav>
 
-  <section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-2 publication-title">MedFuncta: Modality-Agnostic Representations Based on Efficient Neural Fields</h1>
-          <h4 class="title is-4">arXiv preprint</h4>
-          
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://pfriedri.github.io">Paul Friedrich</a>,
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-1 publication-title">MedFuncta: A Unified Framework for Learning Efficient
+                        Medical Neural Fields</h1>
+                    <h4 class="title is-4">arXiv preprint</h4>
+                    <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                  <a href="https://pfriedri.github.io">Paul Friedrich</a><sup><small>1</small></sup>,
+              </span>
+                        <span class="author-block">
+                  <a href="https://dbe.unibas.ch/en/persons/florentin-bieder/">Florentin Bieder</a><sup><small>1</small></sup>,
+              </span>
+                        <span class="author-block">
+                  <a href="https://www.kiinformatik.mri.tum.de/de/team/julian_mcginnis">Julian McGinnis</a><sup><small>2</small></sup>,
+              </span>
+                        <span class="author-block">
+                  <a href="https://medicine.yale.edu/profile/julia-wolleb/">Julia Wolleb</a><sup><small>3</small></sup>,
+              </span>
+                        <span class="author-block">
+                  <a href="https://www.professoren.tum.de/en/rueckert-daniel">Daniel Rueckert</a><sup><small>2,4</small></sup>,
+              </span>
+                        <span class="author-block">
+              <a href="https://dbe.unibas.ch/en/persons/philippe-claude-cattin/">Philippe C. Cattin</a><sup><small>1</small></sup>
             </span>
-            <span class="author-block">
-              <a href="https://dbe.unibas.ch/en/persons/florentin-bieder/">Florentin Bieder</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://dbe.unibas.ch/en/persons/philippe-claude-cattin/">Philippe C. Cattin</a>
-            </span>
-          </div>
+                    </div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">University of Basel, Department of Biomedical Engineering</span>
-          </div>
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"><sup><small>1</small></sup>University of Basel</span> <span
+                            class="author-block"><sup><small>2</small></sup>Technical University of Munich</span>
+                    </div>
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"><sup><small>3</small></sup>Yale University</span> <span
+                            class="author-block"><sup><small>4</small></sup>Imperial College London</span>
+                    </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">    
-              <!-- arXiv Link. -->
-              <span class="link-block">
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                            <!-- arXiv Link. -->
+                            <span class="link-block">
                 <a href="https://arxiv.org/abs/2502.14401"
-                  class="external-link button is-normal is-rounded is-dark">
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
                 </a>
               </span>
 
-              <!-- Code Link. -->
-              <span class="link-block">
+                            <!-- Code Link. -->
+                            <span class="link-block">
                 <a href="https://github.com/pfriedri/medfuncta"
-                  class="external-link button is-normal is-rounded is-dark">
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
                 </a>
               </span>
 
-              <!-- Video Link. -->
-              <span class="link-block">
+                            <!-- Video Link. -->
+                            <span class="link-block">
                 <a href="https://www.youtube.com/@pfriedrich"
-                  class="external-link button is-normal is-rounded is-dark">
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fab fa-youtube"></i></span>
                   <span>Video (soon)</span>
                 </a>
               </span>
 
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://pfriedri.github.io/medfuncta-io"
-                  class="external-link button is-normal is-rounded is-dark">
+                            <!-- Dataset Link. -->
+                            <span class="link-block">
+                <a href="https://doi.org/10.5281/zenodo.14898708"
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="far fa-images"></i></span>
-                  <span>Datasets (soon)</span>
+                  <span>MedNF Datasets (soon)</span>
                 </a>
-              </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Eyecatcher. -->
-  <section class="eyecatcher">
+<!-- Eyecatcher. -->
+<section class="eyecatcher">
     <div class="container is-max-desktop">
-      <div class="hero-body">
-        <img src="images/Overview.png">
-        <h2 class="subtitle has-text-centered">
-          <i>(Left)</i> The proposed network architecture with shared weights \(\theta\) and signal specific parameters \(\phi^{(i)}\) that modulate the base network. 
-          <i>(Right)</i> The proposed meta-learning approach to obtain shared weights \(\theta^*\) that allow to fit signal specific parameters \(\phi^{(1, ..., N)}\) in few update steps.
-        </h2>
-      </div>
+        <div class="hero-body">
+            <div class="has-text-centered">
+                <img src="images/Overview.png" width="66%">
+            </div>
+            <h2 class="subtitle has-text-justified" style="margin-top: 1rem;">
+                Our proposed <b>MedFuncta</b> framework generalizes medical neural fields from single-instances to dataset-level neural representations.
+                Single data points are encoded into a unified representation, namely a 1D latent vector, which enables consistent and modality-agnostic downstream processing.
+            </h2>
+        </div>
     </div>
-  </section>
+</section>
 
-  <!-- Abstract. -->
-  <section class="section" style="background-color:#f5f5f5">
+<!-- Abstract. -->
+<section class="section" style="background-color:#f5f5f5">
     <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              Recent research in medical image analysis with deep learning almost exclusively focuses on grid- or voxel-based data representations. We challenge this common choice by introducing MedFuncta, a modality-agnostic continuous data representation based on neural fields. 
-              We demonstrate how to scale neural fields from single instances to large datasets by exploiting redundancy in medical signals and by applying an efficient meta-learning approach with a context reduction scheme. 
-              We further address the spectral bias in commonly used SIREN activations, by introducing an \(\omega_0\)-schedule, improving reconstruction quality and convergence speed. 
-              We validate our proposed approach on a large variety of medical signals of different dimensions and modalities (1D: ECG; 2D: Chest X-ray, Retinal OCT, Fundus Camera, Dermatoscope, Colon Histopathology, Cell Microscopy; 3D: Brain MRI, Lung CT) and successfully demonstrate that we can solve relevant downstream tasks on these representations. 
-              We additionally release a large-scale dataset of > 550 k annotated neural fields to promote research in this direction.
-            </p>
-          </div>
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Abstract</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        Research in medical imaging primarily focuses on discrete data representations that poorly scale
+                        with grid resolution and fail to capture the often continuous nature of the underlying signal.
+                        Neural Fields (NFs) offer a powerful alternative by modeling data as continuous functions.
+                        While single-instance NFs have successfully been applied in medical contexts, extending them to
+                        large-scale medical datasets remains an open challenge.
+                        We therefore introduce <b>MedFuncta</b>, a unified framework for large-scale NF training on
+                        diverse medical signals.
+                        Building on Functa, our approach encodes data into a unified representation, namely a 1D latent
+                        vector, that modulates a shared, meta-learned NF, enabling generalization across a dataset.
+                        We revisit common design choices, introducing a non-constant frequency parameter \(\omega\) in
+                        widely used SIREN activations, and establish a connection between this \(\omega\)-schedule and
+                        layer-wise learning rates, relating our findings to recent work in theoretical learning
+                        dynamics.
+                        We additionally introduce a scalable meta-learning strategy for shared network learning that
+                        employs sparse supervision during training, thereby reducing memory consumption and
+                        computational overhead while maintaining competitive performance.
+                        Finally, we evaluate MedFuncta across a diverse range of medical datasets and show how to solve
+                        relevant downstream tasks on our neural data representation.
+                        To promote further research in this direction, we release our code, model weights and the first
+                        large-scale dataset - <b>MedNF</b> - of > 500 k latents for multi-instance medical NFs.
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- General Idea. -->
-  <section class="section ">
+<!-- Data as Functions. -->
+<section class="section ">
     <div class="container is-max-desktop ">
-      <div class="columns is-centered has-text-centered ">
-        <div class="column ">
-          <h2 class="title is-3 ">General Idea</h2>
-          <div class="content has-text-justified ">
-            <p>
-              It is a common choice to represent data on discretized grids, e.g., to represent an image as a grid of pixels. While this data representation is widely explored, it poorly scales with grid resolution and ignores the often continuous nature of the underlying signal. Recent research has shown that neural fields (NFs) provide an interesting, continuous alternative to represent different kinds of data modalities like sound, images, shapes, or 3D scenes, by treating data as a neural function that takes a spatial position (e.g., a pixel coordinate) as input and outputs the appropriate measurement (e.g., an image intensity value).
-              This work investigates how to find meaningful functional representations of medical data, allowing relevant downstream tasks to be solved on this compressed, modality-agnostic representation rather than the original signal, mitigating the need to design modality-specific networks.
-            </p>
-          </div>
-          <img src="images/NFs.png" style="width:60%">
-          <h2 class="subtitle has-text-centered">Difference between explicitly defined discrete representations on the left and continuous Neural Fields that define a signal (e.g., an image) as a neural function \(f_\theta\) on the right.</h2>
+        <div class="columns is-centered has-text-centered ">
+            <div class="column ">
+                <h2 class="title is-3 ">Medical Data as Neural Functions</h2>
+                <div class="content has-text-justified ">
+                    <p>
+                        This work introduces <b>MedFuncta</b>, a framework that generalizes medical Neural Fields from isolated, single-instance models to dataset-level neural representations.
+                        The central idea is to meta-learn a shared neural representation across the dataset, in which each signal is represented by a unique, signal-specific parameter vector that conditions a shared network.
+                        This structure enables the model to capture and reuse redundancies across different signals, drastically improving computational efficiency and scalability.
+                        Unlike prior methods that rely on patch-based representations, <b>our proposed framework represents each signal, from 1D time series to 3D volumetric data, with a single 1D latent vector</b>.
+                        This abstraction enables <b>consistent downstream processing across diverse data types</b>, and is especially advantageous in medical applications, where the ability to <b>unify multiple data modalities under a common representation</b> is desirable, and where the inherent capability of Neural Fields to <b>handle irregularly sampled, heterogeneous data</b> provides further benefits.
+                    </p>
+                </div>
+                <img src="images/Network.png" style="width:100%">
+                <h2 class="subtitle has-text-centered">The proposed network architecture with an \(\omega\)-schedule, that implicitly controls the layer's effective learning rates.
+                </h2>
+                <br>
+                <br>
+                <h3 class="title is-5 ">Architecture with \(\omega\)-schedule</h3>
+                <div class="has-text-justified">
+                    We argue that most sets of signals (datasets) contain large amounts of redundant information or structure that we can learn over the entire set.
+                    This is particularly true in medicine, where patients exhibit broadly similar yet slightly varying anatomies.
+                    We therefore define a neural network \(f_{\theta,\phi^{(i)}}:\mathbb{R}^C\rightarrow\mathbb{R}^D\) with shared network parameters \(\theta\) that represent this redundant information and additional signal-specific parameters \(\phi^{(i)}\in\mathbb{R}^{P}\) that condition the base network to represent a specific signal \(s_i\).
+                    We apply a \(K\)-layer MLP architecture with a hidden dimension of \(L\) and FiLM modulated SIREN activations.
+                    While recent research treats SIRENs frequency parameter \(\omega\) as a single hyperparameter that remains constant over all network layers, we identify this as a main restriction when being applied in a generalization setting.
+                    Following recent work demonstrating that shallow network layers learn the low-frequency content of a signal and deeper layers add more and more high-frequency information, we introduce an \(\omega\)-schedule that linearly increases from \(\omega_{1}\) to \(\omega_{K}\).
+                    We find that this is equivalent to a <i>layer-wise learning rate schedule</i>, which positively influences the network's learning dynamics.
+                    For further information on the relationship between an SIREN layer's \(\omega\)-parameter and it's effective learning rate, we refer to our paper.
+                </div>
+                <br>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <img src="images/PSNR_Abl.png" alt="Image 1" width=45%>
+                    <img src="images/SSIM_Abl.png" alt="Image 2" width=45%>
+                </div>
+                <h2 class="subtitle has-text-centered">An ablation study demonstrating the effect of our proposed \(\omega\)-schedule, with \(\omega_1\) and \(\omega_K=\omega_1\delta\).
+                </h2>
+                <br>
+                <br>
+                <h3 class="title is-5 ">Meta-Learning Shared Model Parameters (with Context Reduction)</h3>
+                <div class="has-text-justified">
+                    To efficiently create a set of NFs, we aim to meta-learn the shared parameters \(\theta\) so that we
+                    can fit a signal \(s_i\) by only optimizing \(\phi^{(i)}\) for very few update steps. We follow a <a
+                        href="https://arxiv.org/abs/1810.03642">CAVIA</a> meta-learning approach. Before we take a
+                    single meta-update step with respect to the shared parameters \(\theta\), we update \(\phi\) for
+                    \(G\) inner-loop update steps.
+                    Since performing a single meta-update step requires backpropagating through the entire inner-loop
+                    optimization, the computational graph must be retained in GPU memory to compute the required
+                    second-order gradients. This is a resource-intensive task that does not scale well to
+                    high-dimensional signals. While first-order approximations or auto-decoder training approaches that
+                    do not rely on second-order optimization exist, recent research has shown that this results in
+                    severe performance drops or unstable training.
+                </div>
+                <br>
+                <img src="images/Learning.png" style="width:100%">
+                <h2 class="subtitle has-text-centered"><i>(Left)</i> The proposed meta-learning framework with context
+                    reduction.
+                    <i>(Right)</i> The test-time optimization process after meta-learning.
+                </h2>
+                <div class="has-text-justified">
+                    To circumvent this issue, we present a context-reduction approach that reduces the amount of
+                    pixel-value pairs used to optimize \(\phi\) in the inner-loop. We randomly sample
+                    \(\gamma|\mathcal{C}|\) coordinate-value pairs from the full context set \(\mathcal{C}\). This
+                    significantly reduces the computational burden, while resulting in marginal perfromance drops.
+                </div>
+                <br>
+                <img src="images/SelectionRatio.png" style="width:70%">
+                <h2 class="subtitle has-text-centered">An ablation study demonstrating the effectiveness of our proposed context reduction scheme.
+                </h2>
+                <br>
+                <br>
+                <h2 class="title is-5 ">Test-Time Adaptation</h2>
+                <div class="has-text-justified">
+                    Given the meta-learned model parameters \(\theta^{*}\), we fit a Neural Field to each signal \(s_1,
+                    ..., s_N\).
+                    We start with initializing the signal-specific parameters \(\phi^{(i)}:=\mathbf{0}\) and optimize
+                    \(\phi^{(i)}\) for \(H\) steps. As no second-order optimization is required at test-time, we can
+                    make use of the full context set.
+                    A set of NFs representing the signals \(s_1, ..., s_N\) is therefore defined by the network
+                    architecture, the shared model parameters \(\theta^{*}\), and the signal-specific parameters
+                    \(\phi^{(1)}, ..., \phi^{(N)}\).
+                </div>
+                <br>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Data as Functions. -->
-  <section class="section ">
+<!-- Learning on Representation. -->
+<section class="section ">
     <div class="container is-max-desktop ">
-      <div class="columns is-centered has-text-centered ">
-        <div class="column ">
-          <h2 class="title is-3 ">Data as Functions</h2>
-          <div class="content has-text-justified ">
-            <p>
-              We argue that most signals, especially in medicine, contain large amounts of redundant information or structure that we can learn over an entire set of signals. We therefore define a neural network \(f_{\theta,\phi^{(i)}}:\mathbb{R}^C\rightarrow\mathbb{R}^D\) with shared network parameters \(\theta\) that represents this redundant information and additional signal specific parameters \(\phi^{(i)}\in\mathbb{R}^{P}\) that condition the base network to represent a specific signal \(s_i\).
-              The proposed network can handle data of different dimensionalities (from 1D ECG data to 3D MRI), by simply changing input and/or output dimensions for the specific data type. <b>The representation of a single datapoint, namely the signal-specific parameters \(\phi^{(i)}\), always remains a single 1D vector</b>.
-            </p>
-          </div>
-          <img src="images/ModalityAgnostic.png" style="width:80%">
-          <h2 class="subtitle has-text-centered">Proposed framework with shared model parameters \(\theta\) that parameterize a shared network, and signal-specific parameter \(\phi^{(i)}\) that condition this network to represent a single signal.</h2>
+        <div class="columns is-centered has-text-centered ">
+            <div class="column ">
+                <h2 class="title is-3 ">Learning on this Representation</h2>
+                <div class="has-text-justified">
+                    To assess whether the learned representation captures relevant information about the underlying signal, we perform classification experiments on the signal-specific parameters \(\phi\), using a \(k\)-Nearest-Neighbor (\(k\)-NN) classifier, or a 3-layer MLP with ReLU activations and dropout.
+                </div>
+                <br>
+                <img src="images/ClassificationExp.png" style="width:70%">
+                <br>
+                <div class="has-text-justified">
+                    We find that solving the two classification tasks (binary and multi-class) on our proposed representation \(\phi\) generally works well.
+                    We outperform both ResNet50 and EfficientNet-B0, applied to the original images, in terms of accuracy and can demonstrate competitive F1 scores, while requiring less training time and model parameters.
+                </div>
+                <br>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Meta-learning. -->
-  <section class="section ">
+<!-- Reconstruction Results. -->
+<section class="section ">
     <div class="container is-max-desktop ">
-      <div class="columns is-centered has-text-centered ">
-        <div class="column ">
-        <h3 class="title is-5 ">Meta-Learning Shared Model Parameters (with Context Reduction)</h3>
-          <div class="has-text-justified">
-            To efficiently create a set of NFs, we aim to meta-learn the shared parameters \(\theta\) so that we can fit a signal \(s_i\) by only optimizing \(\phi^{(i)}\) for very few update steps. We follow a <a href="https://arxiv.org/abs/1810.03642">CAVIA</a> meta-learning approach. Before we take a single meta-update step with respect to the shared parameters \(\theta\), we update \(\phi\) for \(G\) inner-loop update steps.
-            Since performing a single meta-update step requires backpropagating through the entire inner-loop optimization, the computational graph must be retained in GPU memory to compute the required second-order gradients. This is a resource-intensive task that does not scale well to high-dimensional signals. While first-order approximations or auto-decoder training approaches that do not rely on second-order optimization exist, recent research has shown that this results in severe performance drops or unstable training. 
-          </div>
-          <img src="images/Learning.png" style="width:100%">
-          <h2 class="subtitle has-text-centered"> <i>(Left)</i> The proposed meta-learning framework with context reduction.
-                                                  <i>(Right)</i> The test-time optimization process after meta-learning.
-          </h2>
-          <div class="has-text-justified">
-            To circumvent this issue, we present a context-reduction approach that reduces the amount of pixel-value pairs used to optimize \(\phi\) in the inner-loop. We randomly sample \(\gamma|\mathcal{C}|\) coordinate-value pairs from the full context set \(\mathcal{C}\). This significantly reduces the computational burden, while resulting in marginal perfromance drops.
-          </div>
-          <br>
-          <br> 
-          <h2 class="title is-5 ">Test-Time Adaptation</h2>
-          <div class="has-text-justified">
-            Given the meta-learned model parameters \(\theta^{*}\), we fit a Neural Field to each signal \(s_1, ..., s_N\). 
-            We start with initializing the signal-specific parameters \(\phi^{(i)}:=\mathbf{0}\) and optimize \(\phi^{(i)}\) for \(H\) steps. As no second-order optimization is required at test-time, we can make use of the full context set.
-            A set of NFs representing the signals \(s_1, ..., s_N\) is therefore defined by the network architecture, the shared model parameters \(\theta^{*}\), and the signal-specific parameters \(\phi^{(1)}, ..., \phi^{(N)}\).
-          </div>
-          <br>   
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Learning on Representation. -->
-  <section class="section ">
-    <div class="container is-max-desktop ">
-      <div class="columns is-centered has-text-centered ">
-        <div class="column ">
-          <h2 class="title is-3 ">Learning on this Representation</h2>
-          <div class="has-text-justified">
-            To demonstarte that our obtained representation is meaningful, we perform classifcation expereimnts on our MedFuncta representation and compare it to commonly used classifiers on the original data.
-            We apply a very simple MLP classifier with ReLU and dropout to our representation and find that this simple classifier generally perfroms well, indicating that the representation contains meaningful information about the underlying data.
-          </div>
-          <br>
-          <img src="images/ClassificationExp.png" style="width:70%">
-        </div>
-      </div>
-    </div>
-  </section>
+        <div class="columns is-centered has-text-centered ">
+            <div class="column ">
+                <h2 class="title is-3 ">Reconstruction Results</h2>
 
-  <!-- Reconstruction Results. -->
-  <section class="section ">
-    <div class="container is-max-desktop ">
-      <div class="columns is-centered has-text-centered ">
-        <div class="column ">
-          <h2 class="title is-3 ">Reconstruction Results</h2>
-
-          <!-- row 1 -->
-          <div class="columns is-centered">
-            <!-- col 1 -->
-            <div class="column">
-              <div class="content">
-                <div class="tab_container">
-                  <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true" class="juxtapose">
-                    <div class="jx-slider">
-                      <div class="jx-handle " style="left: 54.53%;">
-                        <div class="jx-arrow jx-left"></div>
-                        <div class="jx-control">
-                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+                <!-- row 1 -->
+                <div class="columns is-centered">
+                    <!-- col 1 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/chest/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/chest/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="jx-arrow jx-right"></div>
-                      </div>
-                      <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/chest/input.png" alt="" data-label="Input">
-                      </div>
-                      <div class="jx-image jx-right " style="width: 45.47%;">
-                        <img src="./images/recon/chest/recon.png" alt="" data-label="Recon.">
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <!-- col 2 -->
-            <div class="column">
-              <div class="content">
-                <div class="tab_container">
-                  <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
-                    <div class="jx-slider">
-                      <div class="jx-handle " style="left: 54.53%;">
-                        <div class="jx-arrow jx-left"></div>
-                        <div class="jx-control">
-                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+                    <!-- col 2 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/pneum/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/pneum/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="jx-arrow jx-right"></div>
-                      </div>
-                      <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/pneum/input.png" alt="" data-label="Input">
-                      </div>
-                      <div class="jx-image jx-right " style="width: 45.47%;">
-                        <img src="./images/recon/pneum/recon.png" alt="" data-label="Recon.">
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- col 3 -->
-            <div class="column">
-              <div class="content">
-                <div class="tab_container">
-                  <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
-                    <div class="jx-slider">
-                      <div class="jx-handle " style="left: 54.53%;">
-                        <div class="jx-arrow jx-left"></div>
-                        <div class="jx-control">
-                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                            aria-valuemax="100"></div>
-                         </div>
-                        <div class="jx-arrow jx-right"></div>
-                      </div>
-                      <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/oct/input.png" alt="" data-label="Input">
-                      </div>
-                       <div class="jx-image jx-right " style="width: 45.47%;">
-                        <img src="./images/recon/oct/recon.png" alt="" data-label="Recon.">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>           
-          </div>
 
-        <!-- row 2 -->
-        <div class="columns is-centered">
-          <!-- col 1 -->
-          <div class="column">
-            <div class="content">
-              <div class="tab_container">
-                <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true" class="juxtapose">
-                  <div class="jx-slider">
-                    <div class="jx-handle " style="left: 54.53%;">
-                      <div class="jx-arrow jx-left"></div>
-                      <div class="jx-control">
-                        <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                          aria-valuemax="100"></div>
-                      </div>
-                      <div class="jx-arrow jx-right"></div>
+                    <!-- col 3 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/oct/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/oct/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="jx-image jx-left " style="width: 54.53%;">
-                      <img src="./images/recon/fundus/input.png" alt="" data-label="Input" >
-                    </div>
-                    <div class="jx-image jx-right " style="width: 45.47%;">
-                      <img src="./images/recon/fundus/recon.png" alt="" data-label="Recon.">
-                    </div>
-                  </div>
                 </div>
-               </div>
-            </div>
-          </div>
 
-          <!-- col 2 -->
-          <div class="column">
-              <div class="content">
-                <div class="tab_container">
-                  <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true" class="juxtapose">
-                    <div class="jx-slider">
-                      <div class="jx-handle " style="left: 54.53%;">
-                        <div class="jx-arrow jx-left"></div>
-                        <div class="jx-control">
-                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+                <!-- row 2 -->
+                <div class="columns is-centered">
+                    <!-- col 1 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed1" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/fundus/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/fundus/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="jx-arrow jx-right"></div>
-                      </div>
-                      <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/derma/input.png" alt="" data-label="Input">
-                      </div>
-                      <div class="jx-image jx-right " style="width: 45.47%;">
-                         <img src="./images/recon/derma/recon.png" alt="" data-label="Recon.">
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- col 3 -->
-            <div class="column">
-              <div class="content">
-                <div class="tab_container">
-                  <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true" class="juxtapose">
-                    <div class="jx-slider">
-                      <div class="jx-handle " style="left: 54.53%;">
-                        <div class="jx-arrow jx-left"></div>
-                        <div class="jx-control">
-                          <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0"
-                            aria-valuemax="100"></div>
+
+                    <!-- col 2 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed2" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/derma/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/derma/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="jx-arrow jx-right"></div>
-                      </div>
-                      <div class="jx-image jx-left " style="width: 54.53%;">
-                        <img src="./images/recon/histo/input.png" alt="" data-label="Input">
-                      </div>
-                      <div class="jx-image jx-right " style="width: 45.47%;">
-                        <img src="./images/recon/histo/recon.png" alt="" data-label="Recon.">
-                      </div>
                     </div>
-                  </div>
+
+                    <!-- col 3 -->
+                    <div class="column">
+                        <div class="content">
+                            <div class="tab_container">
+                                <div id="juxtapose-embed3" data-startingposition="50%" data-animate="true"
+                                     class="juxtapose">
+                                    <div class="jx-slider">
+                                        <div class="jx-handle " style="left: 54.53%;">
+                                            <div class="jx-arrow jx-left"></div>
+                                            <div class="jx-control">
+                                                <div class="jx-controller" tabindex="0" role="slider" aria-valuenow="50"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="jx-arrow jx-right"></div>
+                                        </div>
+                                        <div class="jx-image jx-left " style="width: 54.53%;">
+                                            <img src="./images/recon/histo/input.png" alt="" data-label="Input">
+                                        </div>
+                                        <div class="jx-image jx-right " style="width: 45.47%;">
+                                            <img src="./images/recon/histo/recon.png" alt="" data-label="Recon.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- BibTeX -->
-  <section class="section" id="BibTeX">
+<section class="section ">
+    <div class="container is-max-desktop ">
+        <div class="columns is-centered has-text-centered ">
+            <div class="column ">
+                <h2 class="title is-3 ">A Comparison to Functa</h>
+                <img src="images/CompFuncta.png" style="width:80%">
+                <br>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <img src="images/PSNR_Functa.png" alt="Image 1" width=45%>
+                    <img src="images/SSIM_Functa.png" alt="Image 2" width=45%>
+                </div>
+                <h2 class="subtitle has-text-centered">A visual comparison to Functa, as well as PSNR (left) and SSIM (right) curves for the validation performance throughout a training run.
+                </h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BibTeX -->
+<section class="section" id="BibTeX">
     <div class="container is-max-desktop content" style="position: relative;">
-      <h2 class="title">BibTeX</h2>
-    
-      <div style="position: relative; display: inline-block; width: 100%;">
-      <button onclick="copyBibTeX()" class="button is-small is-primary" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-        Copy
-      </button>
-      <pre style="position: relative; padding-right: 5px;">
+        <h2 class="title">BibTeX</h2>
+
+        <div style="position: relative; display: inline-block; width: 100%;">
+            <button onclick="copyBibTeX()" class="button is-small is-primary"
+                    style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                Copy
+            </button>
+            <pre style="position: relative; padding-right: 5px;">
       <code id="bibtex">
 @article{friedrich2025medfuncta,
-         title={MedFuncta: Modality-Agnostic Representations Based on Efficient Neural Fields},
-         author={Friedrich, Paul and Bieder, Florentin and Cattin, Philippe C},
+         title={MedFuncta: A Unified Framework for Learning Efficient Medical Neural Fields},
+         author={Friedrich, Paul and Bieder, Florentin and McGinnis, Julian and Wolleb, Julia and Rueckert, Daniel and Cattin, Philippe C},
          journal={arXiv preprint arXiv:2502.14401},
          year={2025}
         }</code>
       </pre>
-      </div>
+        </div>
     </div>
-  </section>
+</section>
 
 <script>
-function copyBibTeX() {
-  var bibtex = document.getElementById("bibtex").innerText;
-  navigator.clipboard.writeText(bibtex).catch(err => {
-    console.error("Failed to copy: ", err);
-  });
-}
+    function copyBibTeX() {
+        var bibtex = document.getElementById("bibtex").innerText;
+        navigator.clipboard.writeText(bibtex).catch(err => {
+            console.error("Failed to copy: ", err);
+        });
+    }
 </script>
 
 
-  <section class="section " id="Acknowledgements ">
+<section class="section " id="Acknowledgements ">
     <div class="container is-max-desktop content ">
-      <h2 class="title ">Acknowledgements</h2>
-      <p>This work was financially supported by the <a href="https://www.wernersiemens-stiftung.ch/en/ ">Werner Siemens Foundation</a> through the <a href="https://www.wernersiemens-stiftung.ch/en/projects/miracle-ii ">MIRACLE II</a> project.</p>
+        <h2 class="title ">Acknowledgements</h2>
+        <p>This work was financially supported by the <a href="https://www.wernersiemens-stiftung.ch/en/ ">Werner
+            Siemens Foundation</a> through the <a href="https://www.wernersiemens-stiftung.ch/en/projects/miracle-ii ">MIRACLE
+            II</a> project. JM is supported by Bavarian State Ministry for Science and Art (Collaborative Bilateral Research Program Bavaria – Québec: AI in medicine, grant F.4-V0134.K5.1/86/34).</p>
     </div>
-  </section>
+</section>
 
-  <footer class="footer ">
+<footer class="footer ">
     <div class="container ">
-      <div class="content has-text-centered ">
-        <a class="icon-link " href="https://arxiv.org/abs/2502.14401">
-          <i class="fas fa-file-pdf "></i>
-        </a>
-        <a class="icon-link " href="https://github.com/pfriedri/medfuncta" class="external-link " disabled>
-          <i class="fab fa-github "></i>
-        </a>
-      </div>
-      
-      <div class="columns is-centered ">
-        <div class="column is-8 ">
-          <div class="content ">
-          <p>
-            This website is licensed under a <a rel="license " href="http://creativecommons.org/licenses/by-sa/4.0/ ">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This webpage is adepted from the <a href="https://github.com/nerfies/nerfies.github.io ">Nerfies</a> template.
-          </p>
-          </div>
+        <div class="content has-text-centered ">
+            <a class="icon-link " href="https://arxiv.org/abs/2502.14401">
+                <i class="fas fa-file-pdf "></i>
+            </a>
+            <a class="icon-link " href="https://github.com/pfriedri/medfuncta" class="external-link " disabled>
+                <i class="fab fa-github "></i>
+            </a>
         </div>
-      </div>
+
+        <div class="columns is-centered ">
+            <div class="column is-8 ">
+                <div class="content ">
+                    <p>
+                        This website is licensed under a <a rel="license "
+                                                            href="http://creativecommons.org/licenses/by-sa/4.0/ ">Creative
+                        Commons Attribution-ShareAlike 4.0 International License</a>.
+                    </p>
+                    <p>
+                        This webpage is adapted from the <a
+                            href="https://github.com/nerfies/nerfies.github.io ">Nerfies</a> template.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
+</footer>
 
 </body>
 
